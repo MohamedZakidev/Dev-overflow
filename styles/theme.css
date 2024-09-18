@@ -1,13 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @layer utilities {
   .background-light850_dark100 {
     @apply bg-light-850 dark:bg-dark-100;
+  }
+
+  .text-light900_dark100 {
+    @apply text-light-900 dark:text-dark-100;
   }
 
   .background-light900_dark200 {
@@ -179,7 +180,7 @@
   }
 
   .placeholder {
-    @apply placeholder:text-light-400 dark:placeholder:text-light-100;
+    @apply placeholder:text-light-400 dark:placeholder:text-light-500;
   }
 
   .invert-colors {
