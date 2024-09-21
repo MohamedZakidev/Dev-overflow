@@ -1,7 +1,7 @@
 import { SignedIn, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import Theme from "./Theme";
 
 async function Navbar() {
   return (
@@ -21,7 +21,7 @@ async function Navbar() {
 
       <p>globalsearch</p>
       <div className="flex">
-        theme change
+        <Theme />
         <SignedIn>
           <UserButton />
         </SignedIn>
