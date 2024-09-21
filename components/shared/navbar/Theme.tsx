@@ -8,11 +8,10 @@ import {
   MenubarShortcut,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import { useTheme } from "@/context/ThemeProvider";
 import Image from "next/image";
 
 function Theme() {
-  const { mode } = useTheme();
+  //   const { mode } = useTheme();
   return (
     <Menubar className="relative border-none bg-transparent shadow-none">
       <MenubarMenu>
