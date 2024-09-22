@@ -1,6 +1,8 @@
 import { SignedIn, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import GlobalSearch from "../search/GlobalSearch";
+import MobileNav from "./MobileNav";
 import Theme from "./Theme";
 
 async function Navbar() {
@@ -19,12 +21,24 @@ async function Navbar() {
         </h1>
       </Link>
 
-      <p>globalsearch</p>
-      <div className="flex">
+      <GlobalSearch />
+
+      <div className="flex-between gap-5">
         <Theme />
         <SignedIn>
-          <UserButton />
+          <UserButton
+            afterSwitchSessionUrl="/"
+            appearance={{
+              elements: {
+                avatarBox: "h-10 w-10",
+              },
+              variables: {
+                colorPrimary: "#ff7000",
+              },
+            }}
+          />
         </SignedIn>
+        <MobileNav />
       </div>
     </nav>
   );
