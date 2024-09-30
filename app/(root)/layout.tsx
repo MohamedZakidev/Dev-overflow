@@ -13,7 +13,7 @@ function Layout({ children }: { children: React.ReactNode }) {
         </section>
         right sidebar
       </div>
-      Toaster
+      {/* Toaster */}
     </main>
   );
 }
