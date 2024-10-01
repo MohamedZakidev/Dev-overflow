@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Menubar,
   MenubarContent,
@@ -34,7 +35,7 @@ function Theme() {
             />
           )}
         </MenubarTrigger>
-        <MenubarContent className="absolute -right-12 mt-3 min-w-[120px] rounded py-2 dark:border-dark-400 dark:bg-dark-300">
+        <MenubarContent className="absolute -right-12 mt-0 min-w-[120px] rounded py-2 dark:border-dark-400 dark:bg-dark-300">
           {themes.map((theme) => (
             <MenubarItem
               key={theme.value}
@@ -53,7 +54,7 @@ function Theme() {
                 width={16}
                 height={16}
                 className={`${mode === theme.value && "active-theme"} `}
-                alt=""
+                alt="theme icon"
               />
               <p
                 className={`body-semibold text-light-500 ${mode === theme.value ? "text-primary-500" : "text-dark100_light900"}`}

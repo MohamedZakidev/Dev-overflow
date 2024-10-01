@@ -3,7 +3,7 @@ import Image from "next/image"
 
 function GlobalSearch() {
     return (
-        <div className="relative w-full max-w-[600px] max-lg:hidden ">
+        <div className=" relative w-full max-w-[600px] max-lg:hidden ">
             <div className="background-light800_darkgradient relative flex min-h-[56px] grow items-center gap-1 rounded-xl px-4">
                 <Image
                     src="/assets/icons/search.svg"
@@ -15,8 +15,8 @@ function GlobalSearch() {
                 <Input
                     type="text"
                     placeholder="Search globally"
-                    value=""
-                    className="paragraph-regular no-focus background-light800_darkgradient border-none shadow-none outline-none"
+                    // value=""
+                    className="paragraph-regular no-focus dark:dark-gradient border-none bg-light-800 shadow-none outline-none"
                 />
             </div>
         </div>

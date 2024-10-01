@@ -15,10 +15,10 @@ async function Navbar() {
           height={23}
           alt="Dev flow"
         />
-        <h1 className="h2-bold font-spaceGrotesk text-dark-100 dark:text-light-900 max-sm:hidden">
+        <h2 className="h2-bold font-spaceGrotesk text-dark-100 dark:text-light-900 max-sm:hidden">
           Dev
           <span className="text-primary-500"> Overflow</span>
-        </h1>
+        </h2>
       </Link>
 
       <GlobalSearch />
