@@ -14,10 +14,10 @@ const questions = [
     title: "An HTML table where specific cells come from values in a Google Sheet identified by their neighboring cell",
     tags: [{ _id: 1, name: "javascript" }],
     author: { _id: 1, name: "John Doe", picture: "https://example.com/john.jpg" },
-    views: 10,
+    views: 100000,
     answers: [], // Assuming no answers or you can add objects with relevant data
-    upvotes: 3,
-    createdAt: new Date("2023-09-29")
+    upvotes: 3000000,
+    createdAt: new Date("2024-09-29")
   },
   {
     _id: 2,
