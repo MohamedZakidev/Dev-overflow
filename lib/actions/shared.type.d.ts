@@ -130,7 +130,7 @@ export interface GetAllUsersParams {
 
 export interface UpdateUserParams {
     clerkId: string;
-    updatedData: Partial<IUser>;
+    updateData: Partial<IUser>;
     path: string;
 }
 
