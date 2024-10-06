@@ -12,6 +12,8 @@ export async function createQuestion(params: CreateQuestionParams) {
         connectToDatabase()
         // eslint-disable-next-line no-unused-vars
         const { title, content, tags, author, path } = params
+        console.log("author", author)
+
         const question = await Question.create({
             title,
             content,
