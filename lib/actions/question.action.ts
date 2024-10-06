@@ -44,6 +44,8 @@ export async function createQuestion(params: CreateQuestionParams) {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function getQuestions(params: GetQuestionsParams) {
+    connectToDatabase()
+
     try {
         const questions = await Question.find({})
             .populate({ path: "tags", model: Tag })
