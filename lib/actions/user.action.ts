@@ -1,6 +1,6 @@
 "use server"
 
-import Question from "@/database/question.modal"
+import Question from "@/database/question.model"
 import User from "@/database/user.model"
 import { revalidatePath } from "next/cache"
 import { connectToDatabase } from "../mongoose"

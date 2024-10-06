@@ -4,11 +4,11 @@ import Metric from "../shared/Metric"
 import RenderTag from "../shared/RenderTag"
 
 interface Props {
-    _id: number
+    _id: string
     title: string
-    tags: { _id: number, name: string }[]
+    tags: { _id: string, name: string }[]
     author: {
-        _id: number
+        _id: string
         name: string
         picture: string
     }
