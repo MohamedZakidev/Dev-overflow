@@ -23,19 +23,19 @@ function RightSidebar() {
 
     const popularTags = [
         {
-            _id: 1, name: "javaScript", totalQuestions: 2
+            _id: "1", name: "javaScript", totalQuestions: 2
         },
         {
-            _id: 2, name: "React", totalQuestions: 4
+            _id: "2", name: "React", totalQuestions: 4
         },
         {
-            _id: 3, name: "Next", totalQuestions: 5
+            _id: "3", name: "Next", totalQuestions: 5
         },
         {
-            _id: 4, name: "vue", totalQuestions: 2
+            _id: "4", name: "vue", totalQuestions: 2
         },
         {
-            _id: 5, name: "redux", totalQuestions: 3
+            _id: "5", name: "redux", totalQuestions: 3
         }
     ]
 
