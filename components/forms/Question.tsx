@@ -10,18 +10,31 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { createQuestion } from "@/lib/actions/question.action";
 import { QuestionsSchema } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Editor } from '@tinymce/tinymce-react';
 import Image from "next/image";
-import React, { useRef } from 'react';
+import { usePathname, useRouter } from "next/navigation";
+import React, { useRef, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Badge } from "../ui/badge";
 
-function Question() {
-    const editorRef = useRef(null);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const type: any = "create"
 
+interface Props {
+    mongoUserId: string
+}
+
+function Question({ mongoUserId }: Props) {
+    const editorRef = useRef(null);
+    const [isSubmitting, setIsSubmitting] = useState(false)
+
+    const router = useRouter()
+    const pathname = usePathname()
+    console.log("pathname", pathname)
     const form = useForm<z.infer<typeof QuestionsSchema>>({
         resolver: zodResolver(QuestionsSchema),
         defaultValues: {
@@ -32,10 +45,24 @@ function Question() {
     })
 
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof QuestionsSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof QuestionsSchema>) {
+        setIsSubmitting(true)
+        try {
+            await createQuestion({
+                title: values.title,
+                content: values.explanation,
+                tags: values.tags,
+                author: JSON.parse(mongoUserId),
+                path: pathname
+            })
+
+            router.push("/")
+
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsSubmitting(false)
+        }
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -108,6 +135,8 @@ function Question() {
                                         // @ts-expect-error just ignore
                                         editorRef.current = editor
                                     }}
+                                    onBlur={field.onBlur}
+                                    onEditorChange={(content) => field.onChange(content)}
                                     initialValue=""
                                     init={{
                                         height: 350,
@@ -131,7 +160,6 @@ function Question() {
                         </FormItem>
                     )}
                 />
-
 
                 <FormField
                     control={form.control}
@@ -175,7 +203,21 @@ function Question() {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Submit</Button>
+                <Button
+                    type="submit"
+                    className="primary-gradient w-fit self-center px-8 py-6 font-semibold text-light-900"
+                    disabled={isSubmitting}
+                >
+                    {isSubmitting ? (
+                        <>
+                            {type === "edit" ? "Editing..." : "Posting..."}
+                        </>
+                    ) : (
+                        <>
+                            {type === "edit" ? "Edit Question" : "Post Question"}
+                        </>
+                    )}
+                </Button>
             </form>
         </Form>
     )
