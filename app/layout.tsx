@@ -40,7 +40,7 @@ export default function RootLayout({
       }}
     >
       <html lang="en">
-        <body className={`${inter.variable} ${spaceGrotesk.variable} grid min-h-full place-content-center`}>
+        <body className={`${inter.variable} ${spaceGrotesk.variable}`}>
           <ThemeProvider>{children}</ThemeProvider>
         </body>
       </html>
