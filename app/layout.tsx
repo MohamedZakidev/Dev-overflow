@@ -1,8 +1,8 @@
-import "./globals.css";
-import React from "react";
-import { ClerkProvider } from "@clerk/nextjs";
 import ThemeProvider from "@/context/ThemeProvider";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Metadata } from "next";
+import React from "react";
+import "./globals.css";
 // eslint-disable-next-line camelcase
 import { Inter, Space_Grotesk } from "next/font/google";
 
@@ -40,7 +40,7 @@ export default function RootLayout({
       }}
     >
       <html lang="en">
-        <body className={`${inter.variable} ${spaceGrotesk.variable}`}>
+        <body className={`${inter.variable} ${spaceGrotesk.variable} grid min-h-full place-content-center`}>
           <ThemeProvider>{children}</ThemeProvider>
         </body>
       </html>
