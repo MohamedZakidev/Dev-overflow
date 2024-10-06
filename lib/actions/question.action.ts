@@ -40,6 +40,7 @@ export async function createQuestion(params: CreateQuestionParams) {
 
     } catch (error) {
         console.log(error)
+        throw error
     }
 }
 

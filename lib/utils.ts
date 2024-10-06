@@ -18,8 +18,9 @@ export const getTimestamp = (createdAt: Date): string => {
   const year = 365 * day;
 
   if (timeDifference < minute) {
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     const seconds = Math.floor(timeDifference / 1000);
-    return `${seconds} ${seconds === 1 ? 'second' : 'seconds'} ago`;
+    return `Just now`
   } else if (timeDifference < hour) {
     const minutes = Math.floor(timeDifference / minute);
     return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
