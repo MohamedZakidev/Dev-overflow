@@ -1,14 +1,31 @@
 "use server"
-
 import Question from "@/database/question.model"
 import User from "@/database/user.model"
 import { revalidatePath } from "next/cache"
 import { connectToDatabase } from "../mongoose"
-import { CreateUserParams, DeleteUserParams, GetUserByIdParams, UpdateUserParams } from "./shared.type"
+import { CreateUserParams, DeleteUserParams, GetAllUsersParams, GetUserByIdParams, UpdateUserParams } from "./shared.type"
+
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function getAllUsers(params: GetAllUsersParams) {
+    try {
+        connectToDatabase()
+        // const { page, pageSize, filter, searchQuery } = params
+
+        const users = await User.find({})
+            .sort({ createdAt: -1 })
+        return { users }
+
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}
 
 export async function getUserById(params: GetUserByIdParams) {
     try {
         connectToDatabase()
+
         const { userId } = params
         const user = await User.findOne({ clerkId: userId })
         return user
