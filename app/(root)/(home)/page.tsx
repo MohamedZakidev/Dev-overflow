@@ -39,6 +39,7 @@ export default async function Home() {
           containerClasses="hidden max-md:flex"
         />
       </div>
+
       <HomeFilters />
 
       <section className="mt-10 flex w-full flex-col gap-6">

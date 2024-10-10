@@ -18,8 +18,8 @@ interface Props {
     authorId: string
 }
 
-
-function AnswerForm({ question, questionId, authorId }: Props) {
+// i deleted the question prop
+function AnswerForm({ questionId, authorId }: Props) {
     const pathname = usePathname()
     const [isSubmitting, setIsSubmitting] = useState(false)
     const { mode } = useTheme()
@@ -85,7 +85,6 @@ function AnswerForm({ question, questionId, authorId }: Props) {
                     <FormField
                         control={form.control}
                         name="answer"
-                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
                         render={({ field }) => (
                             <FormItem className="flex w-full flex-col gap-3">
                                 <FormControl className="mt-3.5">

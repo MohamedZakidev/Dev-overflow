@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import AnswerForm from "@/components/forms/AnswerForm"
+import AllAnswers from "@/components/shared/AllAnswers"
 import Metric from "@/components/shared/Metric"
 import ParseHTML from "@/components/shared/ParseHTML"
 import RenderTag from "@/components/shared/RenderTag"
@@ -77,6 +78,12 @@ async function QuestionDetails({ params }: any) {
                     />
                 ))}
             </div>
+
+            <AllAnswers
+                userId={JSON.stringify(mongoUser._id)}
+                questionId={JSON.stringify(question._id)}
+                totalAnswers={question.answers.length}
+            />
 
             <AnswerForm
                 authorId={JSON.stringify(mongoUser._id)}

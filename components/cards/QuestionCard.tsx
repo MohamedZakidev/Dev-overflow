@@ -14,7 +14,7 @@ interface Props {
     }
     views: number
     answers: Array<object>
-    upvotes: number
+    upvotes: string[]
     createdAt: Date
 }
 
@@ -50,7 +50,7 @@ function QuestionCard({ _id, title, tags, author, views, answers, upvotes, creat
                 <Metric
                     imgUrl="/assets/icons/like.svg"
                     alt="upvotes"
-                    value={formatAndDivideNumber(upvotes)}
+                    value={formatAndDivideNumber(upvotes.length)}
                     title="Votes"
                     textStyles="small-medium text-dark400_light800"
                 />
