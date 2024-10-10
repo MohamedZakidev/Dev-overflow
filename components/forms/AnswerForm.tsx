@@ -58,7 +58,7 @@ function AnswerForm({ questionId, authorId }: Props) {
     }
 
     return (
-        <div className="mt-8 border-t-2 border-light-800 pt-6">
+        <div>
             <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
                 <h4 className="paragraph-semibold text-dark400_light800">Type your answer here</h4>
                 <Button
