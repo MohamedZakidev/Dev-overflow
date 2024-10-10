@@ -28,13 +28,13 @@ interface Props {
     mongoUserId: string
 }
 
-function Question({ mongoUserId }: Props) {
+function QuestionForm({ mongoUserId }: Props) {
     const editorRef = useRef(null);
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const router = useRouter()
     const pathname = usePathname()
-    console.log("pathname", pathname)
+
     const form = useForm<z.infer<typeof QuestionsSchema>>({
         resolver: zodResolver(QuestionsSchema),
         defaultValues: {
@@ -223,4 +223,4 @@ function Question({ mongoUserId }: Props) {
     )
 }
 
-export default Question
+export default QuestionForm
