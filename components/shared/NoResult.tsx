@@ -30,7 +30,7 @@ function NoResult({ title, description, link, linkTitle }: Props) {
             <h2 className="h2-bold text-dark200_light900 mt-8 text-center">{title}</h2>
             <p className="body-regular text-dark500_light700 my-3.5 max-w-md text-center">{description}</p>
             <Link href={link}>
-                <Button className="paragraph-medium primary-gradient hover:primary-gradient mt-5 min-h-[46px] rounded-lg px-4 py-3 text-light-900" >
+                <Button className="paragraph-medium primary-gradient hover:primary-gradient mt-5 min-h-[46px] rounded-lg px-4 py-3 !font-semibold text-light-900" >
                     {linkTitle}
                 </Button>
             </Link>

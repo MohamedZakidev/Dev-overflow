@@ -5,7 +5,7 @@ import Tag from "@/database/tag.model"
 import User from "@/database/user.model"
 import { revalidatePath } from "next/cache"
 import { connectToDatabase } from "../mongoose"
-import { CreateQuestionParams, GetQuestionByIdParams, GetQuestionsParams } from "./shared.type"
+import { CreateQuestionParams, GetQuestionByIdParams, GetQuestionsParams, QuestionVoteParams } from "./shared.type"
 
 
 export async function getQuestionById(params: GetQuestionByIdParams) {
@@ -76,3 +76,60 @@ export async function createQuestion(params: CreateQuestionParams) {
     }
 }
 
+export async function upvoteQuestion(params: QuestionVoteParams) {
+    try {
+        connectToDatabase()
+        const { questionId, userId, hasUpvoted, hasDownvoted, path } = params
+
+        let updateQuery = {}
+        if (hasUpvoted) {
+            updateQuery = { $pull: { upvotes: userId } }
+        } else if (hasDownvoted) {
+            updateQuery = {
+                $pull: { downvotes: userId },
+                $push: { upvotes: userId }
+            }
+        } else {
+            updateQuery = { $addToSet: { upvotes: userId } }
+        }
+        const question = await Question.findByIdAndUpdate(questionId, updateQuery, { new: true })
+
+        if (!question) {
+            throw new Error("Question not found")
+        }
+        revalidatePath(path)
+        // Todo: increment user reputation by 10 for upvoting a question
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}
+
+export async function downvoteQuestion(params: QuestionVoteParams) {
+    try {
+        connectToDatabase()
+        const { questionId, userId, hasUpvoted, hasDownvoted, path } = params
+
+        let updateQuery = {}
+        if (hasDownvoted) {
+            updateQuery = { $pull: { downvotes: userId } }
+        } else if (hasUpvoted) {
+            updateQuery = {
+                $pull: { upvotes: userId },
+                $push: { downvotes: userId }
+            }
+        } else {
+            updateQuery = { $addToSet: { downvotes: userId } }
+        }
+        const question = await Question.findByIdAndUpdate(questionId, updateQuery, { new: true })
+
+        if (!question) {
+            throw new Error("Question not found")
+        }
+        revalidatePath(path)
+        // Todo: increment user reputation by 10 for upvoting a question
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}

@@ -7,7 +7,6 @@ import Link from "next/link"
 
 async function Community() {
     const result = await getAllUsers({})
-    // console.log(result.users)
 
     return (
         <>

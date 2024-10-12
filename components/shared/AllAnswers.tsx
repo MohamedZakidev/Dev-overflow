@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import Filter from "./Filter"
 import ParseHTML from "./ParseHTML"
+import Votes from "./Votes"
 
 interface Props {
     questionId: string
@@ -17,7 +18,7 @@ interface Props {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function AllAnswers({ questionId, userId, totalAnswers, page, filter }: Props) {
-    const reuslt = await getAnswers({ questionId })
+    const result = await getAnswers({ questionId })
 
     return (
         <div className="mt-11">
@@ -29,8 +30,8 @@ async function AllAnswers({ questionId, userId, totalAnswers, page, filter }: Pr
             </div>
 
             <div>
-                {reuslt.answers.length > 0 &&
-                    reuslt.answers.map((answer) => (
+                {result.answers.length > 0 &&
+                    result.answers.map((answer) => (
                         <article
                             key={answer._id}
 
@@ -41,7 +42,7 @@ async function AllAnswers({ questionId, userId, totalAnswers, page, filter }: Pr
                                 <div className="mb-8 flex w-full flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
                                     <Link
                                         href={`/profile/${answer.author.clerkId}`}
-                                        className="flex flex-1 items-start gap-1 sm:items-center"
+                                        className="flex items-start gap-1 sm:items-center"
                                     >
                                         <Image
                                             src={answer.author.picture}
@@ -61,7 +62,17 @@ async function AllAnswers({ questionId, userId, totalAnswers, page, filter }: Pr
                                             </p>
                                         </div>
                                     </Link>
-                                    <div className="flex justify-end">Voting</div>
+                                    <div className="flex justify-end">
+                                        <Votes
+                                            type="Answer"
+                                            itemId={JSON.stringify(answer._id)}
+                                            userId={JSON.stringify(userId)}
+                                            upvotes={answer.upvotes.length}
+                                            hasUpvoted={answer.upvotes.includes(userId)}
+                                            downvotes={answer.downvotes.length}
+                                            hasDownvoted={answer.downvotes.includes(userId)}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <ParseHTML data={answer.content} />

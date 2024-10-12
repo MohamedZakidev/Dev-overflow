@@ -3,7 +3,7 @@ import Question from "@/database/question.model"
 import User from "@/database/user.model"
 import { revalidatePath } from "next/cache"
 import { connectToDatabase } from "../mongoose"
-import { CreateUserParams, DeleteUserParams, GetAllUsersParams, GetUserByIdParams, UpdateUserParams } from "./shared.type"
+import { CreateUserParams, DeleteUserParams, GetAllUsersParams, GetUserByIdParams, ToggleSaveQuestionParams, UpdateUserParams } from "./shared.type"
 
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -72,10 +72,9 @@ export async function deleteUser(params: DeleteUserParams) {
             throw new Error("User not found")
         }
 
-        // Let's delete user questions for now
-        // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-        const userQuestionsIds = await Question.find({ author: deletedUser._id }).distinct("_id")
+        // const userQuestionsIds = await Question.find({ author: deletedUser._id }).distinct("_id")
 
+        // Let's delete user questions for now
         await Question.deleteMany({ author: deletedUser._id })
 
         // const deletedUser = await User.findByIdAndDelete(user._id)
@@ -86,4 +85,36 @@ export async function deleteUser(params: DeleteUserParams) {
         console.log(error)
         throw error
     }
+}
+
+export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
+    try {
+        connectToDatabase()
+        // questionId, userId 
+        const { userId, questionId, path } = params
+        // get user collection and push questionId in user saved field
+        const user = await User.findById(userId)
+        if (!user) {
+            return new Error("User not found")
+        }
+
+        const isQuestionSaved = user.saved.includes(questionId)
+        if (isQuestionSaved) {
+            // remove question from saved list
+            await User.findByIdAndUpdate(userId, {
+                $pull: { saved: questionId }
+            }, { new: true })
+        } else {
+            // add question to saved collection
+            await User.findByIdAndUpdate(userId, {
+                $addToSet: { saved: questionId }
+            }, { new: true })
+        }
+        revalidatePath(path)
+
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+
 }

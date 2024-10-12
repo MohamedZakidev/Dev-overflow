@@ -11,13 +11,17 @@ import { formatAndDivideNumber, getTimestamp } from "@/lib/utils"
 import { auth } from "@clerk/nextjs/server"
 import Image from "next/image"
 import Link from "next/link"
-import { redirect } from "next/navigation"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function QuestionDetails({ params }: any) {
-    const { userId } = auth()
-    if (!userId) return redirect("/sign-in")
-    const mongoUser = await getUserById({ userId })
+    const { userId: clerkId } = auth();
+
+    let mongoUser;
+    if (clerkId) {
+        mongoUser = await getUserById({ userId: clerkId })
+    }
+    // console.log("userId", clerkId)
+    // console.log("mongoUserId", mongoUser._id)
 
     const question = await getQuestionById({ questionId: params.id })
 
@@ -39,7 +43,20 @@ async function QuestionDetails({ params }: any) {
                         />
                         <p className="paragraph-semibold text-dark300_light700">{question.author.name}</p>
                     </Link>
-                    <div className="flex justify-end"><Votes /></div>
+
+                    <div className="flex justify-end">
+                        <Votes
+                            type="Question"
+                            itemId={JSON.stringify(question._id)}
+                            userId={JSON.stringify(mongoUser._id)}
+                            upvotes={question.upvotes.length}
+                            hasUpvoted={question.upvotes.includes(mongoUser._id)}
+                            downvotes={question.downvotes.length}
+                            hasDownvoted={question.downvotes.includes(mongoUser._id)}
+                            hasSaved={mongoUser?.saved.includes(question._id)}
+                        />
+                    </div>
+
                 </div>
 
                 <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full text-left">{question.title}</h2>
@@ -81,7 +98,7 @@ async function QuestionDetails({ params }: any) {
             </div>
 
             <AllAnswers
-                userId={JSON.stringify(mongoUser._id)}
+                userId={mongoUser._id}
                 questionId={question._id}
                 totalAnswers={question.answers.length}
             />
