@@ -11,17 +11,15 @@ import { formatAndDivideNumber, getTimestamp } from "@/lib/utils"
 import { auth } from "@clerk/nextjs/server"
 import Image from "next/image"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function QuestionDetails({ params }: any) {
     const { userId: clerkId } = auth();
 
-    let mongoUser;
-    if (clerkId) {
-        mongoUser = await getUserById({ userId: clerkId })
-    }
-    // console.log("userId", clerkId)
-    // console.log("mongoUserId", mongoUser._id)
+    if (!clerkId) return redirect("/sign-in")
+
+    const mongoUser = await getUserById({ userId: clerkId })
 
     const question = await getQuestionById({ questionId: params.id })
 

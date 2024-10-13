@@ -5,7 +5,8 @@ import { downvoteQuestion, upvoteQuestion } from "@/lib/actions/question.action"
 import { toggleSaveQuestion } from "@/lib/actions/user.action"
 import { formatAndDivideNumber } from "@/lib/utils"
 import Image from "next/image"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 interface Props {
     type: string
@@ -20,7 +21,8 @@ interface Props {
 
 function Votes({ type, itemId, userId, upvotes, hasUpvoted, downvotes, hasDownvoted, hasSaved }: Props) {
     const pathname = usePathname()
-
+    const router = useRouter()
+    console.log(router)
     async function handleVote(action: string) {
         if (!userId) return
 
@@ -75,6 +77,10 @@ function Votes({ type, itemId, userId, upvotes, hasUpvoted, downvotes, hasDownvo
             path: pathname
         })
     }
+
+    useEffect(() => {
+
+    }, [itemId, userId, pathname])
 
     return (
         <div className="flex gap-5">

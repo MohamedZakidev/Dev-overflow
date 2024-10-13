@@ -3,11 +3,15 @@ import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
 import LocalSearchBar from "@/components/shared/search/LocalSearchBar";
 import { QuestionFilters } from "@/constants/filters";
-import { getQuestions } from "@/lib/actions/question.action";
+import { getSavedQuestions } from "@/lib/actions/user.action";
+import { auth } from "@clerk/nextjs/server";
 
 export default async function collection() {
-    const result = await getQuestions({})
+    const { userId } = auth()
+    if (!userId) return null
 
+    const result = await getSavedQuestions({ clerkId: userId })
+    console.log(result)
     return (
         <>
             <h1 className="h1-bold text-dark100_light900">Saved Questions</h1>
@@ -28,8 +32,9 @@ export default async function collection() {
             </div>
 
             <section className="mt-10 flex w-full flex-col gap-6">
-                {result.questions.length > 1 ?
-                    result.questions.map(question => (
+                {result.questions.length > 0 ?
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    result.questions.map((question: any) => (
                         <QuestionCard
                             key={question._id}
                             _id={question._id}
@@ -46,7 +51,7 @@ export default async function collection() {
                         title="There’s no saved question to show"
                         description="Save questions by clicking the ⭐ icon to add them to your collection"
                         link="/"
-                        linkTitle="Browse Questions"
+                        linkTitle="Explore Questions"
                     />
                 }
             </section>
