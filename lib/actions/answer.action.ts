@@ -41,7 +41,6 @@ export async function createAnswer(params: CreateAnswerParams) {
     }
 }
 
-
 export async function upvoteAnswer(params: AnswerVoteParams) {
     try {
         connectToDatabase()
@@ -70,7 +69,6 @@ export async function upvoteAnswer(params: AnswerVoteParams) {
         throw error
     }
 }
-
 
 export async function downvoteAnswer(params: AnswerVoteParams) {
     try {

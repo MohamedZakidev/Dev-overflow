@@ -109,7 +109,7 @@ export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
                 $pull: { saved: questionId }
             }, { new: true })
         } else {
-            // add question to saved collection
+            // add question to saved
             await User.findByIdAndUpdate(userId, {
                 $addToSet: { saved: questionId }
             }, { new: true })
@@ -122,8 +122,6 @@ export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
     }
 
 }
-
-
 
 export async function getSavedQuestions(params: GetSavedQuestionsParams) {
     try {

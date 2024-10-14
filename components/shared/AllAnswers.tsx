@@ -21,9 +21,14 @@ async function AllAnswers({ questionId, userId, totalAnswers, page, filter }: Pr
     const result = await getAnswers({ questionId })
 
     return (
-        <div className="mt-11">
+        <div className="light-border my-11 border-b pb-11">
             <div className="flex items-center justify-between">
-                <h3 className="primary-text-gradient">{totalAnswers} Answers</h3>
+                <h3 className="primary-text-gradient">
+                    {totalAnswers === 0 ? `No Answers yet` :
+                        totalAnswers === 1 ? `${totalAnswers} Answer` :
+                            `${totalAnswers} Answers`
+                    }
+                </h3>
                 <Filter
                     filters={AnswerFilters}
                 />
@@ -35,7 +40,7 @@ async function AllAnswers({ questionId, userId, totalAnswers, page, filter }: Pr
                         <article
                             key={answer._id}
 
-                            className="light-border border-b py-10"
+                            className="mt-6"
                         >
                             <div className="flex items-center justify-between">
 
