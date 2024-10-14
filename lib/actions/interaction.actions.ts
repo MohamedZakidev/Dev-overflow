@@ -7,33 +7,31 @@ import { ViewQuestionParams } from "./shared.type";
 
 export async function viewQuestion(params: ViewQuestionParams) {
     try {
-        connectToDatabase()
-        const { userId, questionId } = params
+        await connectToDatabase();
 
-        // update view count for the question we view
-        await Question.findByIdAndUpdate(questionId, { $inc: { views: 1 } })
+        const { questionId, userId } = params;
+
+        // Update view count for the question
+        await Question.findByIdAndUpdate(questionId, { $inc: { views: 1 } });
 
         if (userId) {
-            // we check if the user has already viewed that question
             const existingInteraction = await Interaction.findOne({
                 user: userId,
-                question: questionId,
                 action: "view",
+                question: questionId,
             })
 
-            if (existingInteraction) return console.log("User has already viewed that question")
+            if (existingInteraction) return console.log('User has already viewed.')
 
-            // if there is no existing interaction we create one!
-
+            // Create interaction
             await Interaction.create({
                 user: userId,
+                action: "view",
                 question: questionId,
-                action: "view"
             })
         }
-
     } catch (error) {
         console.log(error)
-        throw error
+        throw error;
     }
 }

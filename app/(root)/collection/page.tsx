@@ -11,7 +11,7 @@ export default async function collection() {
     if (!userId) return null
 
     const result = await getSavedQuestions({ clerkId: userId })
-    console.log(result)
+
     return (
         <>
             <h1 className="h1-bold text-dark100_light900">Saved Questions</h1>
