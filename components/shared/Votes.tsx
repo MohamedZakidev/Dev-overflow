@@ -83,11 +83,10 @@ function Votes({ type, itemId, userId, upvotes, hasUpvoted, downvotes, hasDownvo
     useEffect(() => {
         viewQuestion({
             questionId: JSON.parse(itemId),
-            userId: userId ? JSON.parse(userId) : undefined
+            userId: userId ? JSON.parse(userId) : undefined,
+            path: pathname
         })
-        alert("viewed")
-    }, [itemId, userId])
-
+    }, [itemId, userId, pathname])
 
     return (
         <div className="flex gap-5">

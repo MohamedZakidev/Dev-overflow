@@ -54,21 +54,6 @@ async function Tags() {
                     linkTitle="Ask a Question"
                 />
             )}
-
-            {/* <section className="flex-center mt-12 flex-wrap gap-4">
-                {result.tags.length > 1 ? (
-                    result.tags.map(tag => (
-                        <div key={tag}>tag card</div>
-                    ))
-                ) : (
-                    <NoResult
-                        title="No Tags Found"
-                        description="It looks like there are no tags found"
-                        link="/ask-question"
-                        linkTitle="Ask a Question"
-                    />
-                )}
-            </section> */}
         </>
     )
 }
