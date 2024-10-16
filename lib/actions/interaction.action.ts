@@ -2,7 +2,6 @@
 
 import Interaction from "@/database/interaction.model";
 import Question from "@/database/question.model";
-import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../mongoose";
 import { ViewQuestionParams } from "./shared.type";
 
@@ -10,7 +9,7 @@ export async function viewQuestion(params: ViewQuestionParams) {
     try {
         await connectToDatabase();
 
-        const { questionId, userId, path } = params;
+        const { questionId, userId } = params;
 
         // Update view count for the question
         await Question.findByIdAndUpdate(questionId, { $inc: { views: 1 } });
@@ -31,7 +30,7 @@ export async function viewQuestion(params: ViewQuestionParams) {
                 question: questionId,
             })
         }
-        revalidatePath(path)
+        // revalidatePath(path)
     } catch (error) {
         console.log(error)
         throw error;

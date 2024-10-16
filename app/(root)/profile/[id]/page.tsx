@@ -1,6 +1,11 @@
+import AnswersTab from "@/components/shared/AnswersTab"
+import ProfileLink from "@/components/shared/ProfileLink"
+import QuestionsTab from "@/components/shared/QuestionsTab"
+import Stats from "@/components/shared/Stats"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getUserInfo } from "@/lib/actions/user.action"
+import { getJoinedDate } from "@/lib/utils"
 import { URLProps } from "@/types"
 import { SignedIn } from "@clerk/nextjs"
 import { auth } from "@clerk/nextjs/server"
@@ -26,13 +31,26 @@ async function Profile({ params, searchParams }: URLProps) {
                         <h2 className="h2-bold text-dark100_light900">{userInfo.user.name}</h2>
                         <p className="paragraph-regular text-dark200_light800">@{userInfo.user.username}</p>
                         <div className="mt-5 flex flex-wrap items-center justify-start gap-5">
-                            {userInfo.user.location && (
-                                <>Location</>
+                            {userInfo.user.portfolioWebsite && (
+                                <ProfileLink
+                                    imgUrl="/assets/icons/link.svg"
+                                    href={userInfo.user.portfolioWebsite}
+                                    title="Portfolio"
+                                />
                             )}
-                            {userInfo.user.createdAt.toString()}
+                            {userInfo.user.location && (
+                                <ProfileLink
+                                    imgUrl="/assets/icons/location.svg"
+                                    title={userInfo.user.location}
+                                />
+                            )}
+                            <ProfileLink
+                                imgUrl="/assets/icons/calendar.svg"
+                                title={`Joined ${getJoinedDate(userInfo.user.createdAt)}`}
+                            />
                         </div>
                         {userInfo.user.bio && (
-                            <p>{userInfo.user.bio}</p>
+                            <p className="paragraph-regular text-dark400_light800 mt-8">{userInfo.user.bio}</p>
                         )}
                     </div>
                 </div>
@@ -52,7 +70,10 @@ async function Profile({ params, searchParams }: URLProps) {
             </div>
 
             {/* stats later on */}
-            stats
+            <Stats
+                totalQuestions={userInfo.totalQuestions}
+                totalAnswers={userInfo.totalAnswers}
+            />
 
             <div className="mt-10 flex gap-10">
                 <Tabs defaultValue="top-posts" className="flex-1">
@@ -60,8 +81,12 @@ async function Profile({ params, searchParams }: URLProps) {
                         <TabsTrigger value="top-posts" className="tab">Top Posts</TabsTrigger>
                         <TabsTrigger value="answers" className="tab">Answers</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="top-posts">Posts</TabsContent>
-                    <TabsContent value="answers">Answers</TabsContent>
+                    <TabsContent value="top-posts">
+                        <QuestionsTab />
+                    </TabsContent>
+                    <TabsContent value="answers">
+                        <AnswersTab />
+                    </TabsContent>
                 </Tabs>
             </div>
         </>
