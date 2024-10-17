@@ -10,7 +10,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { createQuestion } from "@/lib/actions/question.action";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { QuestionsSchema } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Editor } from '@tinymce/tinymce-react';
@@ -21,41 +21,59 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Badge } from "../ui/badge";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const type: any = "create"
-
 interface Props {
     mongoUserId: string
+    type?: string
+    questionDetails?: string
 }
 
-function QuestionForm({ mongoUserId }: Props) {
+interface Tag {
+    _id: string
+    name: string
+}
+
+function QuestionForm({ mongoUserId, questionDetails, type }: Props) {
     const editorRef = useRef(null);
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const router = useRouter()
     const pathname = usePathname()
 
+    const parsedQuestionDetails = questionDetails && JSON.parse(questionDetails || '')
+    const groupedTags = parsedQuestionDetails?.tags.map((tag: Tag) => tag.name)
+
     const form = useForm<z.infer<typeof QuestionsSchema>>({
         resolver: zodResolver(QuestionsSchema),
         defaultValues: {
-            title: "",
-            explanation: "",
-            tags: []
+            title: parsedQuestionDetails?.title || '',
+            explanation: parsedQuestionDetails?.content || '',
+            tags: groupedTags || []
         },
     })
 
     async function onSubmit(values: z.infer<typeof QuestionsSchema>) {
         setIsSubmitting(true)
         try {
-            await createQuestion({
-                title: values.title,
-                content: values.explanation,
-                tags: values.tags,
-                author: JSON.parse(mongoUserId),
-                path: pathname
-            })
 
-            router.push("/")
+            if (type === "Edit") {
+                await editQuestion({
+                    questionId: parsedQuestionDetails?._id,
+                    title: values.title,
+                    content: values.explanation,
+                    path: pathname
+                })
+                router.push(`/question/${parsedQuestionDetails?._id}`)
+            } else {
+                await createQuestion({
+                    title: values.title,
+                    content: values.explanation,
+                    tags: values.tags,
+                    author: JSON.parse(mongoUserId),
+                    path: pathname
+                })
+
+                router.push("/")
+            }
 
         } catch (error) {
             console.log(error)
@@ -136,7 +154,7 @@ function QuestionForm({ mongoUserId }: Props) {
                                     }}
                                     onBlur={field.onBlur}
                                     onEditorChange={(content) => field.onChange(content)}
-                                    initialValue=""
+                                    initialValue={parsedQuestionDetails?.content || ''}
                                     init={{
                                         height: 350,
                                         menubar: false,
@@ -169,6 +187,7 @@ function QuestionForm({ mongoUserId }: Props) {
                             <FormControl className="mt-3.5">
                                 <>
                                     <Input
+                                        disabled={type === "Edit"}
                                         placeholder="Add tags..."
                                         className="no-focus paragraph-regular background-light900_dark300 text-dark300_light700 light-border-2 min-h-[56px] border"
                                         onKeyDown={(e) => handleonKeyDown(e, field)}
@@ -181,14 +200,17 @@ function QuestionForm({ mongoUserId }: Props) {
                                                     className="subtle-medium background-light800_dark300 text-light400_light500 flex items-center justify-center gap-2 rounded-md border-none px-4 py-2 capitalize"
                                                 >
                                                     {tag}
-                                                    <Image
-                                                        src="/assets/icons/close.svg"
-                                                        alt="delete tag icon"
-                                                        width={12}
-                                                        height={12}
-                                                        className="cursor-pointer object-contain invert-0 dark:invert"
-                                                        onClick={() => handleRemoveTag(tag, field)}
-                                                    />
+                                                    {type !== "Edit" && (
+                                                        <Image
+                                                            src="/assets/icons/close.svg"
+                                                            alt="delete tag icon"
+                                                            width={12}
+                                                            height={12}
+                                                            className="cursor-pointer object-contain invert-0 dark:invert"
+                                                            onClick={() => handleRemoveTag(tag, field)}
+                                                        />
+                                                    )
+                                                    }
                                                 </Badge>
                                             ))}
                                         </div>
@@ -209,11 +231,11 @@ function QuestionForm({ mongoUserId }: Props) {
                 >
                     {isSubmitting ? (
                         <>
-                            {type === "edit" ? "Editing..." : "Posting..."}
+                            {type === "Edit" ? "Editing..." : "Posting..."}
                         </>
                     ) : (
                         <>
-                            {type === "edit" ? "Edit Question" : "Post Question"}
+                            {type === "Edit" ? "Edit Question" : "Post Question"}
                         </>
                     )}
                 </Button>

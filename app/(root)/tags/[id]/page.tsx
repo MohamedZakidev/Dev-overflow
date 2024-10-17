@@ -10,7 +10,6 @@ async function TagDetails({ params, searchParams }: URLProps) {
         page: 1,
         searchQuery: searchParams.q
     })
-    console.log(result)
 
     return (
         <>
@@ -27,7 +26,7 @@ async function TagDetails({ params, searchParams }: URLProps) {
             </div>
 
             <section className="mt-10 flex w-full flex-col gap-6">
-                {result.questions.length > 1 ?
+                {result.questions.length > 0 ?
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     result.questions.map((question: any) => (
                         <QuestionCard

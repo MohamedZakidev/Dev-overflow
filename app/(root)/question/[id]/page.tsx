@@ -7,12 +7,12 @@ import Votes from '@/components/shared/Votes';
 import { getQuestionById } from '@/lib/actions/question.action';
 import { getUserById } from '@/lib/actions/user.action';
 import { formatAndDivideNumber, getTimestamp } from '@/lib/utils';
+import { ParamsProps } from '@/types';
 import { auth } from '@clerk/nextjs/server';
 import Image from 'next/image';
 import Link from 'next/link';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const QuestionDetails = async ({ params }: any) => {
+const QuestionDetails = async ({ params }: ParamsProps) => {
     const { userId: clerkId } = auth();
 
     let mongoUser;
@@ -86,14 +86,16 @@ const QuestionDetails = async ({ params }: any) => {
 
             <div className="mt-8 flex flex-wrap gap-2">
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {result.tags.map((tag: any) => (
-                    <RenderTag
-                        key={tag._id}
-                        _id={tag._id}
-                        name={tag.name}
-                        showCount={false}
-                    />
-                ))}
+                {result.tags.map((tag: any) => {
+                    return (
+                        <RenderTag
+                            key={tag._id}
+                            _id={tag._id}
+                            name={tag.name}
+                            showCount={false}
+                        />
+                    )
+                })}
             </div>
 
             <AllAnswers

@@ -7,7 +7,7 @@ import Tag from "@/database/tag.model"
 import User from "@/database/user.model"
 import { revalidatePath } from "next/cache"
 import { connectToDatabase } from "../mongoose"
-import { CreateQuestionParams, DeleteQuestionParams, GetQuestionByIdParams, GetQuestionsParams, QuestionVoteParams } from "./shared.type"
+import { CreateQuestionParams, DeleteQuestionParams, EditQuestionParams, GetQuestionByIdParams, GetQuestionsParams, QuestionVoteParams } from "./shared.type"
 
 
 export async function getQuestionById(params: GetQuestionByIdParams) {
@@ -15,7 +15,7 @@ export async function getQuestionById(params: GetQuestionByIdParams) {
         connectToDatabase()
 
         const { questionId } = params
-        console.log(questionId)
+
         const question = await Question.findById(questionId)
             .populate({ path: "tags", model: Tag, select: "_id name" })
             .populate({ path: "author", model: User, select: "_id clerkId name picture" })
@@ -148,6 +148,27 @@ export async function deleteQuestion(params: DeleteQuestionParams) {
         await Answer.deleteMany({ question: questionId })
         await Interaction.deleteMany({ question: questionId })
         await Tag.updateMany({ questions: questionId }, { $pull: { questions: questionId } })
+        revalidatePath(path)
+
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}
+
+
+export async function editQuestion(params: EditQuestionParams) {
+    try {
+        connectToDatabase()
+        const { questionId, title, content, path } = params
+
+        const question = await Question.findById(questionId)
+
+        question.title = title
+        question.content = content
+
+        await question.save()
+
         revalidatePath(path)
 
     } catch (error) {

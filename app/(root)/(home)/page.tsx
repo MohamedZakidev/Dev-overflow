@@ -18,7 +18,7 @@ export default async function Home() {
         <Link
           href="/ask-question"
         >
-          <Button className="primary-gradient paragraph-medium min-h-[46px] px-4 py-3 !text-light-900">
+          <Button className="primary-gradient paragraph-medium min-h-[46px] px-4 py-3 !font-semibold !text-light-900">
             Ask a Question
           </Button>
         </Link>
