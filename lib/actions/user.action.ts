@@ -8,7 +8,7 @@ import User from "@/database/user.model"
 import { FilterQuery } from "mongoose"
 import { revalidatePath } from "next/cache"
 import { connectToDatabase } from "../mongoose"
-import { CreateUserParams, DeleteUserParams, GetAllUsersParams, GetSavedQuestionsParams, GetUserByIdParams, ToggleSaveQuestionParams, UpdateUserParams } from "./shared.type"
+import { CreateUserParams, DeleteUserParams, GetAllUsersParams, GetSavedQuestionsParams, GetUserByIdParams, GetUserStatsParams, ToggleSaveQuestionParams, UpdateUserParams } from "./shared.type"
 
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -93,7 +93,7 @@ export async function deleteUser(params: DeleteUserParams) {
 export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
     try {
         connectToDatabase()
-        // questionId, userId 
+
         const { userId, questionId, path } = params
         // get user collection and push questionId in user saved field
         const user = await User.findById(userId)
@@ -172,6 +172,46 @@ export async function getUserInfo(params: GetUserByIdParams) {
         const totalAnswers = await Answer.countDocuments({ author: user._id })
 
         return { user, totalQuestions, totalAnswers }
+
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}
+
+export async function getUserQuestions(params: GetUserStatsParams) {
+    try {
+        connectToDatabase()
+        const { userId, page = 1, pageSize = 10 } = params
+
+        const totalQuestions = await Question.countDocuments({ author: userId })
+
+        const userQuestions = await Question.find({ author: userId })
+            .sort({ view: -1, upvotes: -1 })
+            .populate("tags", "_id name")
+            .populate("author", "_id clerkId name picture")
+
+        return { questions: userQuestions, totalQuestions }
+
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+}
+
+export async function getUserAnswers(params: GetUserStatsParams) {
+    try {
+        connectToDatabase()
+        const { userId, page = 1, pageSize = 10 } = params
+
+        const totalAnswers = await Answer.countDocuments({ author: userId })
+
+        const userAnswers = await Answer.find({ author: userId })
+            .sort({ upvotes: -1 })
+            .populate("question", "_id title")
+            .populate("author", "_id clerkId name picture")
+
+        return { answers: userAnswers, totalAnswers }
 
     } catch (error) {
         console.log(error)

@@ -14,8 +14,11 @@ import Link from "next/link"
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function Profile({ params, searchParams }: URLProps) {
+    // signed in user
     const { userId: clerkId } = auth()
+    // the user we view their profile either me or someone else
     const userInfo = await getUserInfo({ userId: params.id })
+
     return (
         <>
             <div className="flex flex-col-reverse items-start justify-between sm:flex-row">
@@ -82,10 +85,18 @@ async function Profile({ params, searchParams }: URLProps) {
                         <TabsTrigger value="answers" className="tab">Answers</TabsTrigger>
                     </TabsList>
                     <TabsContent value="top-posts">
-                        <QuestionsTab />
+                        <QuestionsTab
+                            searchParams={searchParams}
+                            userId={userInfo.user._id}
+                            clerkId={clerkId}
+                        />
                     </TabsContent>
                     <TabsContent value="answers">
-                        <AnswersTab />
+                        <AnswersTab
+                            searchParams={searchParams}
+                            userId={userInfo.user._id}
+                            clerkId={clerkId}
+                        />
                     </TabsContent>
                 </Tabs>
             </div>
