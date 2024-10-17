@@ -84,7 +84,6 @@ function Votes({ type, itemId, userId, upvotes, hasUpvoted, downvotes, hasDownvo
         viewQuestion({
             questionId: JSON.parse(itemId),
             userId: userId ? JSON.parse(userId) : undefined,
-            path: pathname
         })
     }, [itemId, userId, pathname])
 
