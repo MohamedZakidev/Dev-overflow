@@ -28,7 +28,7 @@ async function UserCard({ user }: Props) {
                     alt="user profile picture"
                     width={100}
                     height={200}
-                    className="rounded-full"
+                    className="aspect-square rounded-[50%]"
                 />
                 <div className="mt-4 text-center">
                     <h3 className="h3-bold text-dark200_light900 line-clamp-1">{user.name}</h3>

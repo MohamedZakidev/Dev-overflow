@@ -52,6 +52,7 @@ export async function createUser(userData: CreateUserParams) {
         throw error;
     }
 }
+
 export async function updateUser(params: UpdateUserParams) {
     try {
         connectToDatabase()
