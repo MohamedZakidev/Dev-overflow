@@ -73,12 +73,32 @@ interface URLQueryParams {
 }
 
 export const formURLQuery = ({ queryParamaters, key, value }: URLQueryParams) => {
-  const queryParamatersObj = qs.parse(queryParamaters)
-  queryParamatersObj[key] = value
+  const currentQueryParamatersObj = qs.parse(queryParamaters)
+  currentQueryParamatersObj[key] = value
 
   return qs.stringifyUrl({
     url: window.location.pathname,
-    query: queryParamatersObj
-  },
-    { skipNull: true })
+    query: currentQueryParamatersObj
+  }, { skipNull: true }
+  )
+}
+
+interface RemoveURLQueryParams {
+  queryParamaters: string
+  keysToRemove: string[]
+}
+
+
+export const removeQueryParamater = ({ queryParamaters, keysToRemove }: RemoveURLQueryParams) => {
+  const currentQueryParamatersObj = qs.parse(queryParamaters)
+
+  keysToRemove.forEach(key => {
+    delete currentQueryParamatersObj[key]
+  })
+
+  return qs.stringifyUrl({
+    url: window.location.pathname,
+    query: currentQueryParamatersObj
+  }, { skipNull: true }
+  )
 }

@@ -1,9 +1,9 @@
 "use client"
 
 import { Input } from "@/components/ui/input"
-import { formURLQuery } from "@/lib/utils"
+import { formURLQuery, removeQueryParamater } from "@/lib/utils"
 import Image from "next/image"
-import { useRouter, useSearchParams } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 
 interface CustomInputProps {
@@ -15,26 +15,33 @@ interface CustomInputProps {
 }
 
 function LocalSearchBar({ route, iconPosition, imgSrc, placeholder, otherClasses }: CustomInputProps) {
+    const pathname = usePathname()
     const router = useRouter()
     const searchParams = useSearchParams()
-    const query = searchParams.get("test")
+    const query = searchParams.get("q")
+
     const [search, setSearch] = useState(query || "")
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             if (search) {
                 const newURL = formURLQuery({
-                    queryParamaters: searchParams.toString(), // Query paramaters or strings
+                    queryParamaters: searchParams.toString(), // Query paramaters or strings // q=someting
                     key: "q",
-                    value: search
+                    value: search // search is the query the user type
                 })
-                // console.log(newURL)
+                router.push(newURL, { scroll: false })
+            } else if (pathname === route) {
+                const newURL = removeQueryParamater({
+                    queryParamaters: searchParams.toString(), // Query paramaters or strings // q=someting
+                    keysToRemove: ["q"],
+                })
                 router.push(newURL, { scroll: false })
             }
+
         }, 300)
-        // Wtf is happening here?????
         return () => clearTimeout(delayDebounceFn)
-    }, [search, searchParams, route])
+    }, [search, searchParams, route, router, pathname])
 
     return (
         <div className={`background-light800_darkgradient flex min-h-[56px] grow items-center gap-4 rounded-[10px] px-4 ${otherClasses}`}>
