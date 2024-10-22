@@ -12,7 +12,6 @@ import { auth } from "@clerk/nextjs/server"
 import Image from "next/image"
 import Link from "next/link"
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function Profile({ params, searchParams }: URLProps) {
     // signed in user
     const { userId: clerkId } = auth()

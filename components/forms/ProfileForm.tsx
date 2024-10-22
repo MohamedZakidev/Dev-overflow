@@ -20,10 +20,11 @@ import { Textarea } from "../ui/textarea"
 
 
 interface Props {
+    clerkId: string
     user: string
 }
 
-function ProfileForm({ user }: Props) {
+function ProfileForm({ clerkId, user }: Props) {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const parsedUser = JSON.parse(user)
     const pathname = usePathname()
@@ -44,7 +45,7 @@ function ProfileForm({ user }: Props) {
         setIsSubmitting(true)
         try {
             await updateUser({
-                clerkId: parsedUser.clerkId,
+                clerkId,
                 updateData: {
                     name: values.name,
                     username: values.username,
