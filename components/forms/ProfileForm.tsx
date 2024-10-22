@@ -44,7 +44,7 @@ function ProfileForm({ user }: Props) {
         setIsSubmitting(true)
         try {
             await updateUser({
-                clerkId: parsedUser?.clerkId, // change here ?
+                clerkId: parsedUser.clerkId,
                 updateData: {
                     name: values.name,
                     username: values.username,
