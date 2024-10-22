@@ -11,7 +11,7 @@ interface Props extends SearchParamsProps {
 async function QuestionsTab({ userId, clerkId, searchParams }: Props) {
   const result = await getUserQuestions({ userId, page: 1 })
   return (
-    <div className="mt-5">
+    <div className="mt-5 flex flex-col gap-6">
       {result.questions.map(question => (
         <QuestionCard
           key={question._id}
