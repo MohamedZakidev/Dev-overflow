@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs/server"
 async function EditProfile() {
     const { userId } = auth()
     if (!userId) {
+        console.log("userrr is not FoUnd")
         return null
     }
 
