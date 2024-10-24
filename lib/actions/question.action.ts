@@ -34,7 +34,7 @@ export async function getQuestions(params: GetQuestionsParams) {
     try {
         connectToDatabase()
 
-        const { searchQuery } = params
+        const { searchQuery, filter } = params
 
         const query: FilterQuery<typeof Question> = {}
 
@@ -44,11 +44,29 @@ export async function getQuestions(params: GetQuestionsParams) {
                 { content: { $regex: new RegExp(searchQuery, "i") } }
             ]
         }
+        console.log(JSON.stringify(query, null, 2))
+
+        let sortOptions = {}
+        switch (filter) {
+            case "newest":
+                sortOptions = { createdAt: - 1 }
+                break;
+            case "frequent":
+                sortOptions = { views: - 1 }
+                break;
+
+            case "unanswered":
+                // sortOptions = { answers: { $size: 0 } } work hereeeeeeee
+                break;
+            default:
+                sortOptions = { createdAt: - 1 }
+                break;
+        }
 
         const questions = await Question.find(query)
             .populate({ path: "tags", model: Tag })
             .populate({ path: "author", model: User })
-            .sort({ createdAt: -1 })
+            .sort(sortOptions)
 
         return { questions }
     } catch (error) {

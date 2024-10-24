@@ -3,10 +3,11 @@ import Filter from "@/components/shared/Filter"
 import LocalSearchBar from "@/components/shared/search/LocalSearchBar"
 import { UserFilters } from "@/constants/filters"
 import { getAllUsers } from "@/lib/actions/user.action"
+import { SearchParamsProps } from "@/types"
 import Link from "next/link"
 
-async function Community() {
-    const result = await getAllUsers({})
+async function Community({ searchParams }: SearchParamsProps) {
+    const result = await getAllUsers({ searchQuery: searchParams.q })
 
     return (
         <>
@@ -28,7 +29,8 @@ async function Community() {
 
             <section className="mt-12 flex flex-wrap gap-4">
                 {result.users.length > 0 ? (
-                    result.users.map(user => (
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    result.users.map((user: any) => (
                         <UserCard key={user._id} user={user} />
                     ))
                 ) : (
