@@ -24,7 +24,7 @@ interface Props {
 
 function Votes({ type, itemId, userId, upvotes, hasUpvoted, downvotes, hasDownvoted, hasSaved }: Props) {
     const pathname = usePathname();
-    // const router = useRouter()
+
     async function handleSave() {
         await toggleSaveQuestion({
             userId: JSON.parse(userId),

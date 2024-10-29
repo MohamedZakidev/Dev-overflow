@@ -7,7 +7,7 @@ import { URLProps } from "@/types"
 async function TagDetails({ params, searchParams }: URLProps) {
     const result = await getQuestionsByTagId({
         tagId: params.id,
-        page: 1,
+        page: searchParams.page ? +searchParams.page : 1,
         searchQuery: searchParams.q
     })
 
@@ -40,6 +40,7 @@ async function TagDetails({ params, searchParams }: URLProps) {
                             upvotes={question.upvotes}
                             createdAt={question.createdAt}
                         />
+
                     )) :
                     <NoResult
                         title="There’s no tags to show"
@@ -49,6 +50,10 @@ async function TagDetails({ params, searchParams }: URLProps) {
                     />
                 }
             </section>
+            <Pagination
+                pageNumber={searchParams?.page ? +searchParams.page : 1}
+                isNext={result.isNext}
+            />
         </>
     )
 }

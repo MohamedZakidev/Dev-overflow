@@ -11,14 +11,17 @@ interface Props {
     questionId: string
     userId: string
     totalAnswers: number
-    page?: number
-    filter?: number
+    page?: string
+    filter?: string
 }
 
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function AllAnswers({ questionId, userId, totalAnswers, page, filter }: Props) {
-    const result = await getAnswers({ questionId })
+    const result = await getAnswers({
+        questionId,
+        page: page ? +page : 1,
+        sortBy: filter
+    })
 
     return (
         <div className="light-border my-11 border-b pb-11">
@@ -31,6 +34,7 @@ async function AllAnswers({ questionId, userId, totalAnswers, page, filter }: Pr
                 </h3>
                 <Filter
                     filters={AnswerFilters}
+                    otherclasses={"min-h-[56px] sm:min-w-[170px]"}
                 />
             </div>
 

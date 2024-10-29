@@ -29,12 +29,13 @@ export async function getQuestionById(params: GetQuestionByIdParams) {
     }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function getQuestions(params: GetQuestionsParams) {
     try {
         connectToDatabase()
 
-        const { searchQuery, filter } = params
+        const { searchQuery, filter, page = 1, pageSize = 4 } = params
+        // for pagination
+        const skipAmount = (page - 1) * pageSize
 
         const query: FilterQuery<typeof Question> = {}
 
@@ -44,7 +45,6 @@ export async function getQuestions(params: GetQuestionsParams) {
                 { content: { $regex: new RegExp(searchQuery, "i") } }
             ]
         }
-        console.log(JSON.stringify(query, null, 2))
 
         let sortOptions = {}
         switch (filter) {
@@ -54,21 +54,27 @@ export async function getQuestions(params: GetQuestionsParams) {
             case "frequent":
                 sortOptions = { views: - 1 }
                 break;
-
             case "unanswered":
-                // sortOptions = { answers: { $size: 0 } } work hereeeeeeee
+                query.answers = { $size: 0 }
                 break;
             default:
-                sortOptions = { createdAt: - 1 }
                 break;
         }
 
         const questions = await Question.find(query)
             .populate({ path: "tags", model: Tag })
             .populate({ path: "author", model: User })
+            .skip(skipAmount)
+            .limit(pageSize)
             .sort(sortOptions)
 
-        return { questions }
+        const totalQuestions = await Question.countDocuments(query)
+        // console.log({ skipAmount })
+        // console.log("questionslength", questions.length)
+        // console.log({ totalQuestions })
+        const isNext = totalQuestions > skipAmount + questions.length
+
+        return { questions, isNext }
     } catch (error) {
         console.log(error)
         throw error
