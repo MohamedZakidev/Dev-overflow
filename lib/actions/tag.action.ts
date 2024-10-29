@@ -79,7 +79,9 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
         connectToDatabase()
 
         // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-        const { tagId, page = 1, pageSize = 10, searchQuery } = params
+        const { tagId, page = 1, pageSize = 1, searchQuery } = params
+
+        const skipAmount = (page - 1) * pageSize
 
         const tagFilter: FilterQuery<ITag> = { _id: tagId }
 
@@ -89,6 +91,8 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
             match: searchQuery ? { title: { $regex: searchQuery, $options: "i" } } : {},
             options: {
                 sort: { createdAt: -1 },
+                skip: skipAmount,
+                limit: pageSize
             },
             populate: [
                 { path: 'tags', model: Tag, select: "_id name" },
