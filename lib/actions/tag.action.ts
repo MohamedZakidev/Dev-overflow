@@ -100,13 +100,32 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
             ]
         })
 
+        const tagNoLimit = await Tag.findOne(tagFilter).populate({
+            path: 'questions',
+            model: Question,
+            match: searchQuery ? { title: { $regex: searchQuery, $options: "i" } } : {},
+            options: {
+                sort: { createdAt: -1 },
+                skip: skipAmount,
+            },
+        })
+
         if (!tag) {
             throw new Error('Tag not found');
         }
 
+
+        const totalQuestions = tagNoLimit.questions.length
+        console.log({ totalQuestions })
+        const isNext = totalQuestions > pageSize
+
         const questions = tag.questions;
 
-        return { tagTitle: tag.name, questions }
+        return {
+            tagTitle: tag.name,
+            questions,
+            isNext
+        }
 
     } catch (error) {
         console.log(error)
