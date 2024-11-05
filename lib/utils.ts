@@ -91,7 +91,6 @@ interface RemoveURLQueryParams {
 
 export const removeQueryParamater = ({ queryParamaters, keysToRemove }: RemoveURLQueryParams) => {
   const currentQueryParamatersObj = qs.parse(queryParamaters)
-
   keysToRemove.forEach(key => {
     delete currentQueryParamatersObj[key]
   })

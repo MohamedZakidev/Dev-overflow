@@ -4,39 +4,43 @@ import { formURLQuery, removeQueryParamater } from "@/lib/utils"
 import Image from "next/image"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
+import GlobalResult from "./GlobalResult"
 
 function GlobalSearch() {
     const pathname = usePathname()
     const router = useRouter()
     const searchParams = useSearchParams()
-    const query = searchParams.get("global")
 
-    const [search, setSearch] = useState(query || "")
+    const localQuery = searchParams.get("q")
+    const globalQuery = searchParams.get("global")
+
+    const [globalSearch, setGlobalSearch] = useState(globalQuery || "")
+    const [isOpen, setIsOpen] = useState(false)
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
-            if (search) {
+            if (globalSearch) {
                 const newURL = formURLQuery({
                     queryParamaters: searchParams.toString(), // Query paramaters or strings // q=someting
                     key: "global",
-                    value: search // search is the query the user type
+                    value: globalSearch // search is the query the user type
                 })
                 router.push(newURL, { scroll: false })
-            } else if (query) {
+            } else if (localQuery || !globalSearch) {
                 const newURL = removeQueryParamater({
                     queryParamaters: searchParams.toString(), // Query paramaters or strings // q=someting
-                    keysToRemove: ["global"],
+                    keysToRemove: ["global", "type"],
                 })
                 router.push(newURL, { scroll: false })
             }
 
         }, 300)
         return () => clearTimeout(delayDebounceFn)
-    }, [search, searchParams, router, pathname])
+    }, [globalSearch, searchParams, router, pathname, localQuery])
 
 
     return (
-        <div className=" relative w-full max-w-[600px] max-lg:hidden ">
+        <div className="relative w-full max-w-[600px] max-lg:hidden ">
             <div className="background-light800_darkgradient relative flex min-h-[56px] grow items-center gap-1 rounded-xl px-4">
                 <Image
                     src="/assets/icons/search.svg"
@@ -48,11 +52,16 @@ function GlobalSearch() {
                 <Input
                     type="text"
                     placeholder="Search globally"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    value={globalSearch}
+                    onChange={(e) => {
+                        setGlobalSearch(e.target.value)
+                        if (!isOpen) setIsOpen(true)
+                        if (e.target.value === "" && isOpen) setIsOpen(false)
+                    }}
                     className="paragraph-regular no-focus dark:dark-gradient border-none bg-light-800 shadow-none outline-none"
                 />
             </div>
+            {isOpen && <GlobalResult />}
         </div>
     )
 }
