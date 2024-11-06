@@ -26,7 +26,7 @@ function GlobalSearch() {
                     value: globalSearch // search is the query the user type
                 })
                 router.push(newURL, { scroll: false })
-            } else if (localQuery || !globalSearch) {
+            } else if (!globalSearch) {
                 const newURL = removeQueryParamater({
                     queryParamaters: searchParams.toString(), // Query paramaters or strings // q=someting
                     keysToRemove: ["global", "type"],
