@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import GlobalFilters from "./GlobalFilters"
+
 function GlobalResult() {
     const searchParams = useSearchParams()
     const [isLoading, setIsLoading] = useState(false)
@@ -27,7 +28,7 @@ function GlobalResult() {
             setResult([])
             setIsLoading(true)
             try {
-                // 
+                // Everything Everywhere all at once
             } catch (error) {
                 console.error(error)
                 throw new Error
@@ -43,7 +44,7 @@ function GlobalResult() {
 
     return (
         <div className="absolute top-full z-10 mt-3 w-full rounded-xl bg-light-800 py-5 shadow-sm dark:bg-dark-400">
-            <GlobalFilters /> // work here
+            <GlobalFilters />
 
             <div className="my-5 h-px bg-light-700/50 dark:bg-primary-500/50" />
 

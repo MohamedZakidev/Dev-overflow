@@ -11,24 +11,21 @@ function HomeFilters() {
     const [active, setActive] = useState("")
 
     function handleQuestionsFilter(item: string) {
-        setActive("")
         if (active === item) {
+            setActive("")
             const newURL = formURLQuery({
                 queryParamaters: searchParams.toString(), // Query paramaters or strings // q=someting
                 key: "filter",
                 value: null // search is the query the user type
             })
-
             router.push(newURL, { scroll: false })
         } else {
             setActive(item)
-            console.log("SearchParams:", searchParams.toString())
             const newURL = formURLQuery({
                 queryParamaters: searchParams.toString(), // Query paramaters or strings // q=someting
                 key: "filter",
                 value: item.toLocaleLowerCase() // search is the query the user type
             })
-
             router.push(newURL, { scroll: false })
         }
     }
