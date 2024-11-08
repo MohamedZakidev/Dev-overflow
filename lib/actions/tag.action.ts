@@ -137,7 +137,9 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
 export async function getPopularTags() {
     try {
         connectToDatabase()
+        // aggregate reshapes the tag document
         const popularTags = await Tag.aggregate([
+            // name : 1 means include the name property and 0 means exclude the property 
             { $project: { name: 1, numberofQuestions: { $size: "$questions" } } },
             { $sort: { numberofQuestions: -1 } },
             { $limit: 5 }

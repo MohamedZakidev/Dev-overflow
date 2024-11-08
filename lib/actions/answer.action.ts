@@ -1,6 +1,8 @@
 "use server"
 import Answer from "@/database/answer.model"
+import Interaction from "@/database/interaction.model"
 import Question from "@/database/question.model"
+import User from "@/database/user.model"
 import { revalidatePath } from "next/cache"
 import { connectToDatabase } from "../mongoose"
 import { AnswerVoteParams, CreateAnswerParams, DeleteAnswerParams, GetAnswersParams } from "./shared.type"
@@ -57,9 +59,20 @@ export async function createAnswer(params: CreateAnswerParams) {
             content, author, question
         })
 
-        await Question.findByIdAndUpdate(question, {
+        const questionObj = await Question.findByIdAndUpdate(question, {
             $push: { answers: answer._id }
         })
+
+        await Interaction.create({
+            user: author,
+            question,
+            action: "answer",
+            answers: answer._id,
+            tags: questionObj.tags
+        })
+        await User.findByIdAndUpdate(author,
+            { $inc: { reputation: 10 } }
+        )
         revalidatePath(path)
 
     } catch (error) {
@@ -89,8 +102,18 @@ export async function upvoteAnswer(params: AnswerVoteParams) {
         if (!answer) {
             throw new Error("Answer not found")
         }
-        revalidatePath(path)
         // Todo: increment user reputation by 10 for upvoting a Answer
+        await User.findByIdAndUpdate(userId, {
+            $inc: { reputation: hasUpvoted ? -2 : 2 }
+        })
+
+        if (JSON.stringify(answer.author) !== JSON.stringify(userId)) {
+            await User.findByIdAndUpdate(answer.author, {
+                $inc: { reputation: hasUpvoted ? -10 : 10 }
+            })
+        }
+
+        revalidatePath(path)
     } catch (error) {
         console.log(error)
         throw error
@@ -118,8 +141,16 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
         if (!answer) {
             throw new Error("Answer not found")
         }
+
+        await User.findByIdAndUpdate(userId, {
+            $inc: { reputation: hasDownvoted ? -2 : 2 }
+        })
+
+        await User.findByIdAndUpdate(answer.author, {
+            $inc: { reputation: hasDownvoted ? -10 : 10 }
+        })
         revalidatePath(path)
-        // Todo: increment user reputation by 10 for upvoting a question
+
     } catch (error) {
         console.log(error)
         throw error

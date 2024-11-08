@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Document, model, models, Schema } from "mongoose";
 
 export interface IAnswer extends Document {

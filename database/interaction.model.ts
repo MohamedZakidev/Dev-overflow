@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Document, Schema, model, models } from "mongoose";
 
 export interface IInteraction extends Document {
@@ -19,7 +18,6 @@ const InteractionSchema = new Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Interaction = models.Interaction || model("Interaction", InteractionSchema)
 
 export default Interaction

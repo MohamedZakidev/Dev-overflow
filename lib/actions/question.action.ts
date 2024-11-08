@@ -84,7 +84,6 @@ export async function getQuestions(params: GetQuestionsParams) {
 export async function createQuestion(params: CreateQuestionParams) {
     try {
         connectToDatabase()
-        // eslint-disable-next-line no-unused-vars
         const { title, content, tags, author, path } = params
 
         const question = await Question.create({
@@ -109,6 +108,14 @@ export async function createQuestion(params: CreateQuestionParams) {
         await Question.findByIdAndUpdate(question._id, {
             $push: { tags: { $each: tagDocuments } }
         })
+
+        await Interaction.create({
+            user: author,
+            question: question._id,
+            action: "ask-question",
+            tags: tagDocuments,
+        })
+        await User.findByIdAndUpdate(author, { $inc: { reputation: 5 } })
 
         revalidatePath(path)
 
@@ -139,6 +146,15 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
         if (!question) {
             throw new Error("Question not found")
         }
+
+        await User.findByIdAndUpdate(userId, {
+            $inc: { reputation: hasUpvoted ? -1 : 1 }
+        })
+
+        await User.findByIdAndUpdate(question.author, {
+            $inc: { reputation: hasUpvoted ? -10 : 10 }
+        })
+
         revalidatePath(path)
         // Todo: increment user reputation by 10 for upvoting a question
     } catch (error) {
@@ -168,6 +184,14 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
         if (!question) {
             throw new Error("Question not found")
         }
+
+        await User.findByIdAndUpdate(userId, {
+            $inc: { reputation: hasDownvoted ? -1 : 1 }
+        })
+
+        await User.findByIdAndUpdate(question.author, {
+            $inc: { reputation: hasDownvoted ? -10 : 10 }
+        })
         revalidatePath(path)
         // Todo: increment user reputation by 10 for upvoting a question
     } catch (error) {

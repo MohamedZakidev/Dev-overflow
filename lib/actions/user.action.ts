@@ -246,6 +246,47 @@ export async function getUserInfo(params: GetUserByIdParams) {
         const totalQuestions = await Question.countDocuments({ author: user._id })
         const totalAnswers = await Answer.countDocuments({ author: user._id })
 
+        const [questionUpvotes] = await Question.aggregate([
+            { $match: { author: user._id } },
+            {
+                $project: {
+                    _id: 0, upvotes: { $size: "$upvotes" }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalUpvotes: { $sum: "$upvotes" }
+                }
+            }
+        ])
+
+        const [answerUpvotes] = await Answer.aggregate([
+            { $match: { author: user._id } },
+            {
+                $project: {
+                    _id: 0, upvotes: { $size: "$upvotes" }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalUpvotes: { $sum: "$upvotes" }
+                }
+            }
+        ])
+
+        const [questionViews] = await Question.aggregate([
+            { $match: { author: user._id } },
+            {
+                $group: {
+                    _id: null,
+                    totalViews: { $sum: "$views" }
+                }
+            }
+        ])
+
+
         return { user, totalQuestions, totalAnswers }
 
     } catch (error) {
@@ -262,7 +303,7 @@ export async function getUserQuestions(params: GetUserStatsParams) {
 
 
         const userQuestions = await Question.find({ author: userId })
-            .sort({ view: -1, upvotes: -1 })
+            .sort({ createdAt: -1, view: -1, upvotes: -1 })
             .skip(skipAmount)
             .limit(pageSize)
             .populate("tags", "_id name")
