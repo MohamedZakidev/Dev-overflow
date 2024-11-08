@@ -3,19 +3,37 @@ import { Input } from "@/components/ui/input"
 import { formURLQuery, removeQueryParamater } from "@/lib/utils"
 import Image from "next/image"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import GlobalResult from "./GlobalResult"
 
 function GlobalSearch() {
     const pathname = usePathname()
     const router = useRouter()
     const searchParams = useSearchParams()
+    const searchResultRef = useRef(null)
 
     const localQuery = searchParams.get("q")
     const globalQuery = searchParams.get("global")
 
     const [globalSearch, setGlobalSearch] = useState(globalQuery || "")
     const [isOpen, setIsOpen] = useState(false)
+
+    useEffect(() => {
+        // to close on pathname change
+        setIsOpen(false)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        function handleOutsideClick(event: any) {
+            // @ts-expect-error no need for ts
+            if (searchResultRef.current && !searchResultRef.current.contains(event.target)) {
+                setIsOpen(false)
+                setGlobalSearch("")
+            }
+        }
+        document.addEventListener("click", handleOutsideClick)
+
+        return () => document.removeEventListener("click", handleOutsideClick)
+    }, [pathname])
+
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
@@ -40,7 +58,10 @@ function GlobalSearch() {
 
 
     return (
-        <div className="relative w-full max-w-[600px] max-lg:hidden ">
+        <div
+            className="relative w-full max-w-[600px] max-lg:hidden"
+            ref={searchResultRef}
+        >
             <div className="background-light800_darkgradient relative flex min-h-[56px] grow items-center gap-1 rounded-xl px-4">
                 <Image
                     src="/assets/icons/search.svg"

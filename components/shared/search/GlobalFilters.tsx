@@ -28,7 +28,7 @@ function GlobalFilters() {
             const newURL = formURLQuery({
                 queryParamaters: searchParams.toString(), // Query paramaters or strings // q=someting
                 key: "type",
-                value: item.toLocaleLowerCase() // search is the query the user type
+                value: item.toLowerCase() // search is the query the user type
             })
             router.push(newURL, { scroll: false })
         }

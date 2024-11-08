@@ -1,3 +1,5 @@
+"use client"
+import { globalSearch } from "@/lib/actions/general.action"
 import { ReloadIcon } from "@radix-ui/react-icons"
 import Image from "next/image"
 import Link from "next/link"
@@ -8,18 +10,7 @@ import GlobalFilters from "./GlobalFilters"
 function GlobalResult() {
     const searchParams = useSearchParams()
     const [isLoading, setIsLoading] = useState(false)
-    const [result, setResult] = useState([
-        {
-            type: "question", id: "1", title: "Nextjs question"
-        },
-        {
-            type: "tag", id: "2", title: "Nextjs tag"
-        },
-        {
-            type: "user", id: "3", title: "jsm"
-        }
-    ])
-
+    const [result, setResult] = useState([])
     const global = searchParams.get("global")
     const type = searchParams.get("type")
 
@@ -28,7 +19,8 @@ function GlobalResult() {
             setResult([])
             setIsLoading(true)
             try {
-                // Everything Everywhere all at once
+                const res = await globalSearch({ query: global, type })
+                setResult(JSON.parse(res))
             } catch (error) {
                 console.error(error)
                 throw new Error
@@ -36,10 +28,24 @@ function GlobalResult() {
                 setIsLoading(false)
             }
         }
+        if (global) {
+            fetchResult()
+        }
     }, [global, type])
 
     function renderLink(type: string, id: string) {
-        return "/"
+        switch (type) {
+            case "question":
+                return `/question/${id}`
+            case "answer":
+                return `/question/${id}`
+            case "user":
+                return `/profile/${id}`
+            case "tag":
+                return `/tags/${id}`
+            default:
+                return "/"
+        }
     }
 
     return (
@@ -62,7 +68,7 @@ function GlobalResult() {
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             result.map((item: any, index: number) => (
                                 <Link
-                                    href={renderLink("type", "id")}
+                                    href={renderLink(item.type, item.id)}
                                     key={item.type + item.id + index}
                                     className="flex w-full cursor-pointer items-start gap-3 px-5 py-2.5 hover:bg-light-700/50 hover:dark:bg-dark-500/50"
                                 >
