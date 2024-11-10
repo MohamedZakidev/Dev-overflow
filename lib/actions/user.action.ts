@@ -5,9 +5,11 @@ import Answer from "@/database/answer.model"
 import Question from "@/database/question.model"
 import Tag from "@/database/tag.model"
 import User from "@/database/user.model"
+import { BadgeCriteriaType } from "@/types"
 import { FilterQuery } from "mongoose"
 import { revalidatePath } from "next/cache"
 import { connectToDatabase } from "../mongoose"
+import { assignBadges } from "../utils"
 import { CreateUserParams, DeleteUserParams, GetAllUsersParams, GetSavedQuestionsParams, GetUserByIdParams, GetUserStatsParams, ToggleSaveQuestionParams, UpdateUserParams } from "./shared.type"
 
 
@@ -286,8 +288,17 @@ export async function getUserInfo(params: GetUserByIdParams) {
             }
         ])
 
+        const criteria = [
+            { type: "QUESTION_COUNT" as BadgeCriteriaType, count: totalQuestions },
+            { type: "ANSWER_COUNT" as BadgeCriteriaType, count: totalAnswers },
+            { type: "QUESTION_UPVOTES" as BadgeCriteriaType, count: questionUpvotes?.totalUpvotes || 0 },
+            { type: "ANSWER_UPVOTES" as BadgeCriteriaType, count: answerUpvotes?.totalUpvotes || 0 },
+            { type: "TOTAL_VIEWS" as BadgeCriteriaType, count: questionViews?.totalViews || 0 },
+        ]
 
-        return { user, totalQuestions, totalAnswers }
+        const badgeCounts = assignBadges(criteria)
+
+        return { user, totalQuestions, totalAnswers, badgeCounts }
 
     } catch (error) {
         console.log(error)
@@ -303,7 +314,7 @@ export async function getUserQuestions(params: GetUserStatsParams) {
 
 
         const userQuestions = await Question.find({ author: userId })
-            .sort({ createdAt: -1, view: -1, upvotes: -1 })
+            .sort({ view: -1, upvotes: -1 })
             .skip(skipAmount)
             .limit(pageSize)
             .populate("tags", "_id name")

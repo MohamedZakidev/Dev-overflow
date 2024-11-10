@@ -75,6 +75,8 @@ async function Profile({ params, searchParams }: URLProps) {
             <Stats
                 totalQuestions={userInfo.totalQuestions}
                 totalAnswers={userInfo.totalAnswers}
+                badgesCounts={userInfo.badgeCounts}
+                reputation={userInfo.user.reputation}
             />
 
             <div className="mt-10 flex gap-10">
