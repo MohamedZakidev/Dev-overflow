@@ -21,7 +21,9 @@ interface Props {
 // i deleted the question prop
 function AnswerForm({ questionId, authorId }: Props) {
     const pathname = usePathname()
+
     const [isSubmitting, setIsSubmitting] = useState(false)
+
     const { mode } = useTheme()
     const editorRef = useRef(null);
 
@@ -57,13 +59,31 @@ function AnswerForm({ questionId, authorId }: Props) {
         }
     }
 
+    async function generateAIAnswer() {
+        // if (!authorId) { return };
+
+        // try {
+        //     const response = await
+        //         fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/chatgpt`, {
+        //             method: "POST",
+        //             body: JSON.stringify({ question })
+        //         })
+        //     const AIAnswer = await response.json()
+        //     alert(AIAnswer.reply)
+        // } catch (error) {
+        //     console.log(error)
+        //     throw error
+        // }
+        alert("OpenAi API is not free anymore :(")
+    }
+
     return (
         <div>
             <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
                 <h4 className="paragraph-semibold text-dark400_light800">Type your answer here</h4>
                 <Button
                     className="btn light-border-2 gap-1.5 rounded-md px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500"
-                    onClick={() => { }}
+                    onClick={generateAIAnswer}
                 >
                     <Image
                         src="/assets/icons/stars.svg"
@@ -73,7 +93,6 @@ function AnswerForm({ questionId, authorId }: Props) {
                         className="object-contain"
                     />
                     Generate AI Answer
-
                 </Button>
             </div>
 
