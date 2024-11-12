@@ -8,7 +8,27 @@ import { Button } from "@/components/ui/button";
 import { HomePageFilters } from "@/constants/filters";
 import { getQuestions } from "@/lib/actions/question.action";
 import { SearchParamsProps } from "@/types";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Home | Dev Overflow",
+  description:
+    "A community-driven platform for asking and answering programming questions. Get help, share knowledge, and collaborate with developers from around the world. Explore topics in web development, mobile app development, algorithms, data structures, and more.",
+  icons: "/assets/images/site-logo.svg",
+  openGraph: {
+    url: "https://dev-overflow-mocha.vercel.app/",
+    images: [
+      {
+        url: "/assets/images/dark-illustration.png",
+        width: 1200,
+        height: 630,
+        alt: "Dev Overflow platform preview image"
+      }
+    ],
+    type: "website",
+  }
+};
 
 export default async function Home({ searchParams }: SearchParamsProps) {
   const result = await getQuestions({
