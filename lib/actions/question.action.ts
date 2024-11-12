@@ -33,7 +33,7 @@ export async function getQuestions(params: GetQuestionsParams) {
     try {
         connectToDatabase()
 
-        const { searchQuery, filter, page = 1, pageSize = 4 } = params
+        const { searchQuery, filter, page = 1, pageSize = 8 } = params
         // for pagination
         const skipAmount = (page - 1) * pageSize
 
@@ -156,7 +156,6 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
         })
 
         revalidatePath(path)
-        // Todo: increment user reputation by 10 for upvoting a question
     } catch (error) {
         console.log(error)
         throw error

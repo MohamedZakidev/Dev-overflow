@@ -1,4 +1,5 @@
 "use client";
+import { toast } from "@/hooks/use-toast";
 import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
 import { viewQuestion } from "@/lib/actions/interaction.action";
 import {
@@ -31,12 +32,20 @@ function Votes({ type, itemId, userId, upvotes, hasUpvoted, downvotes, hasDownvo
             questionId: JSON.parse(itemId),
             path: pathname
         })
+        return toast({
+            title: `Question ${!hasSaved ? "Saved in" : "Removed from"} your collection`,
+            duration: 2000,
+            className: `${!hasSaved ? "bg-primary-500 text-white p-4 rounded-lg" : "bg-red-500 text-white p-4 rounded-lg"} shadow-lg`
+
+        })
     }
 
     async function handleVote(action: string) {
         if (!userId) {
-            // eslint-disable-next-line no-useless-return
-            return;
+            return toast({
+                title: "Please Log in",
+                description: "You must be Logged in to perform this action"
+            })
         }
 
         if (action === "upvote") {
@@ -57,7 +66,13 @@ function Votes({ type, itemId, userId, upvotes, hasUpvoted, downvotes, hasDownvo
                     path: pathname,
                 });
             }
+            return toast({
+                title: `Upvote ${!hasUpvoted ? "Successful" : "Removed"}`,
+                duration: 2000,
+                className: `${!hasUpvoted ? "bg-green-500 text-white p-4 rounded-lg" : "bg-red-500 text-white p-4 rounded-lg"} shadow-lg`
+            })
         }
+
 
         if (action === "downvote") {
             if (type === "Question") {
@@ -77,6 +92,11 @@ function Votes({ type, itemId, userId, upvotes, hasUpvoted, downvotes, hasDownvo
                     path: pathname,
                 });
             }
+            return toast({
+                title: `Downvote ${!hasDownvoted ? "Successful" : "Removed"}`,
+                duration: 2000,
+                className: `${!hasDownvoted ? "bg-green-500 text-white p-4 rounded-lg" : "bg-red-500 text-white p-4 rounded-lg"} shadow-lg`
+            })
         }
     }
 
