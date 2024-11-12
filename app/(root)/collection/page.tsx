@@ -7,7 +7,11 @@ import { QuestionFilters } from "@/constants/filters";
 import { getSavedQuestions } from "@/lib/actions/user.action";
 import { SearchParamsProps } from "@/types";
 import { auth } from "@clerk/nextjs/server";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+    title: "Collection | Dev Overflow"
+}
 export default async function collection({ searchParams }: SearchParamsProps) {
     const { userId } = auth()
     if (!userId) return null

@@ -57,7 +57,7 @@ function LocalSearchBar({ route, iconPosition, imgSrc, placeholder, otherClasses
                 placeholder={placeholder}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="background-light800_darkgradient placeholder no-focus paragraph-regular border-none shadow-none outline-none"
+                className="text-dark400_light700 placeholder no-focus paragraph-regular border-none bg-transparent shadow-none outline-none"
             />
         </div>
     )

@@ -71,7 +71,7 @@ function ProfileForm({ clerkId, user }: Props) {
                     name="name"
                     render={({ field }) => (
                         <FormItem className="space-y-2.5">
-                            <FormLabel>
+                            <FormLabel className="paragraph-semibold text-dark400_light800">
                                 Full Name
                                 <span className="text-primary-500">*</span>
                             </FormLabel>
@@ -92,7 +92,7 @@ function ProfileForm({ clerkId, user }: Props) {
                     name="username"
                     render={({ field }) => (
                         <FormItem className="space-y-2.5">
-                            <FormLabel>
+                            <FormLabel className="paragraph-semibold text-dark400_light800">
                                 Username
                                 <span className="text-primary-500">*</span>
                             </FormLabel>
@@ -113,7 +113,7 @@ function ProfileForm({ clerkId, user }: Props) {
                     name="portfolioWebsite"
                     render={({ field }) => (
                         <FormItem className="space-y-2.5">
-                            <FormLabel>Portfolio link</FormLabel>
+                            <FormLabel className="paragraph-semibold text-dark400_light800">Portfolio link</FormLabel>
                             <FormControl>
                                 <Input
                                     type="url"
@@ -132,7 +132,7 @@ function ProfileForm({ clerkId, user }: Props) {
                     name="location"
                     render={({ field }) => (
                         <FormItem className="space-y-2.5">
-                            <FormLabel>location</FormLabel>
+                            <FormLabel className="paragraph-semibold text-dark400_light800">location</FormLabel>
                             <FormControl>
                                 <Input
                                     placeholder="Where are you from?"
@@ -150,7 +150,7 @@ function ProfileForm({ clerkId, user }: Props) {
                     name="bio"
                     render={({ field }) => (
                         <FormItem className="space-y-2.5">
-                            <FormLabel>Bio</FormLabel>
+                            <FormLabel className="paragraph-semibold text-dark400_light800">Bio</FormLabel>
                             <FormControl>
                                 <Textarea
                                     placeholder="What's special about you"
