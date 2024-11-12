@@ -21,7 +21,8 @@ export const metadata: Metadata = {
         height: 630,
         alt: "Dev Overflow platform preview image"
       }
-    ]
+    ],
+    type: "website",
   }
 };
 
