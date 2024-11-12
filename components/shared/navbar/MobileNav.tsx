@@ -16,7 +16,7 @@ function NavContent() {
   const pathname = usePathname()
 
   return (
-    <section className="flex h-full flex-col gap-6 pt-16">
+    <section className="flex flex-col gap-6 pt-16">
       {sidebarLinks.map(item => {
         const isActive = (pathname.includes(item.route) && item.route.length > 0) || item.route === pathname
         return (
@@ -73,7 +73,6 @@ function MobileNav() {
           <SheetClose asChild>
             <NavContent />
           </SheetClose>
-
           <SignedOut>
             <div className="flex flex-col gap-3">
               <SheetClose asChild>
@@ -94,6 +93,7 @@ function MobileNav() {
 
             </div>
           </SignedOut>
+
         </div>
 
       </SheetContent>

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     url: "https://dev-overflow-mocha.vercel.app/",
     images: [
       {
-        url: "/assets/images/dark-illustration.png",
+        url: "/public/assets/images/dark-illustration.png",
         width: 1200,
         height: 630,
         alt: "Dev Overflow platform preview image"
