@@ -27,6 +27,13 @@ export const metadata: Metadata = {
       }
     ],
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dev Flow",
+    description:
+      "A community-driven platform for asking and answering programming questions.",
+    images: ["/assets/images/dark-illustration.png"],
   }
 };
 
