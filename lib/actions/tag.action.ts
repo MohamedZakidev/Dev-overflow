@@ -79,7 +79,7 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
         connectToDatabase()
 
         // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-        const { tagId, page = 1, pageSize = 1, searchQuery } = params
+        const { tagId, page = 1, pageSize = 10, searchQuery } = params
 
         const skipAmount = (page - 1) * pageSize
 

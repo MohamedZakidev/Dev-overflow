@@ -161,7 +161,7 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
     try {
         connectToDatabase();
 
-        const { clerkId, page = 1, pageSize = 2, filter, searchQuery } = params;
+        const { clerkId, page = 1, pageSize = 10, filter, searchQuery } = params;
 
         const skipAmount = (page - 1) * pageSize
 
