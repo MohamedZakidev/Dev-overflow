@@ -69,9 +69,6 @@ export async function getQuestions(params: GetQuestionsParams) {
             .sort(sortOptions)
 
         const totalQuestions = await Question.countDocuments(query)
-        // console.log({ skipAmount })
-        // console.log("questionslength", questions.length)
-        // console.log({ totalQuestions })
         const isNext = totalQuestions > skipAmount + questions.length
 
         return { questions, isNext }
