@@ -126,13 +126,6 @@ export function assignBadges(criteria: CriteriaType) {
         badgeCounts[key as keyof BadgeCounts] += 1
       }
     }
-
-    // Object.keys(badgeLevels).forEach((level: any) => {
-    //   if (count >= badgeLevels[level]) {
-    //     badgeCounts[level as keyof BadgeCounts] += 1
-    //   }
-    // })
-
   })
 
   return badgeCounts

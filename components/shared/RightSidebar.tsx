@@ -15,7 +15,7 @@ async function RightSidebar() {
                     {topQuestions.map(question => (
                         <Link
                             key={question._id}
-                            href={`question/${question._id}`}
+                            href={`/question/${question._id}`}
                             className="flex cursor-pointer items-center justify-between gap-7"
                         >
                             <p className="body-medium text-dark500_light700">{question.title}</p>
