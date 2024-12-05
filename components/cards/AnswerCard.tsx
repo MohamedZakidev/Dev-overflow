@@ -22,8 +22,7 @@ interface Props {
     createdAt: Date;
 }
 
-const AnswerCard = ({ clerkId, _id, question, author, upvotes, createdAt,
-}: Props) => {
+const AnswerCard = ({ clerkId, _id, question, author, upvotes, createdAt }: Props) => {
     const showActionButtons = clerkId && clerkId === author.clerkId;
 
     return (
