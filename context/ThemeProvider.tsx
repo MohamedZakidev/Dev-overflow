@@ -14,8 +14,7 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
   function handleThemeChange() {
     const isDarkMode =
       localStorage.theme === "dark" ||
-      (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches);
+      (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches);
 
     if (isDarkMode) {
       setMode("dark");
@@ -40,7 +39,7 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error("useTheme must be usen within a ThemeProvider");
+    throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
 }
