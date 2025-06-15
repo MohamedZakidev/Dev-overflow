@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     description:
       "A community-driven platform for asking and answering programming questions.",
     images: ["/assets/images/dark-illustration.png"],
-  }
+  },
 };
 
 const inter = Inter({
